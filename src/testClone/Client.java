@@ -6,6 +6,7 @@ import javax.jws.soap.SOAPBinding;
  * Created by xzy on 18/8/21  .
  */
 
+// 测试浅拷贝和对象赋值
 public class Client {
     public static void main(String[] args){
         User userA = new User("张三", 15L);
