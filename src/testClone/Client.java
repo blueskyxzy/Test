@@ -18,5 +18,15 @@ public class Client {
         System.out.println(userA.toString());
         System.out.println(userB.toString());
         System.out.println(userC.toString());
+
+        User principleA = new User("王校长", 50L);
+        User principleB = new User("张校长", 20L);
+        School schoolA = new School("天津大学", principleA);
+        School schoolB = schoolA;
+        schoolB.setName("南开大学");
+        schoolB.setPrinciple(principleB);
+
+        System.out.println(schoolA.toString());
+        System.out.println(schoolB.toString());
     }
 }
