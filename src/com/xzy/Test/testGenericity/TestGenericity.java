@@ -1,3 +1,5 @@
+package com.xzy.test.testGenericity;
+
 /**
  * Created by xzy on 18/6/12  .
  */
