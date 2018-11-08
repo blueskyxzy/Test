@@ -1,3 +1,4 @@
+package com.xzy.test.interview1;
 
 class Fruit
 {

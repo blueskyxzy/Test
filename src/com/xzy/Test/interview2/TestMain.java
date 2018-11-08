@@ -1,3 +1,5 @@
+package com.xzy.test.interview2;
+
 class Person {
     String name;
     String gender;
