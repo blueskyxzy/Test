@@ -1,4 +1,4 @@
-package com.xzy.Test;
+package com.xzy.test.testListFilter;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -72,7 +72,7 @@ public class TestListFilter {
         // 存放过滤结果的列表
         List<Book> result = null;
 
-        // 使用lambda表达式过滤出结果并放到result列表里，written by zhangchao
+        // 使用lambda表达式过滤出结果并放到result列表里
         result = bookList.stream()
                 .filter((Book b) -> ids.contains(b.getId()))
                 .collect(Collectors.toList());

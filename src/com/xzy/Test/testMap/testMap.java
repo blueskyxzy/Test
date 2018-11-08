@@ -1,10 +1,12 @@
-import java.util.HashMap;
+package com.xzy.test.testMap;
+
+import ;
 import java.util.Map;
 
 public class testMap {
 
     public static void main(String[] args) {
-        Map<Long,String> map = new HashMap<>();
+        Map<Long,String> map = new MyHashMap<>();
         Long key1 = Long.valueOf(1);
         Long key2 = Long.valueOf(2);
         map.put(key1,"test1");

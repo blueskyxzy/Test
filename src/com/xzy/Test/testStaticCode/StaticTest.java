@@ -1,4 +1,6 @@
-import com.xzy.Test.TestStatic;
+package com.xzy.test.testStaticCode;
+
+import com.xzy.test.testStaticCode.TestStatic;
 
 /**
  * Created by xzy on 18/7/17  .

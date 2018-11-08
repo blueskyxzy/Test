@@ -1,4 +1,4 @@
-package com.xzy.Test;
+package com.xzy.test.testRemoveAll;
 
 import java.util.ArrayList;
 import java.util.List;

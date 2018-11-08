@@ -1,4 +1,4 @@
-package com.xzy.Test;
+package com.xzy.test.testStaticCode;
 
 /**
  * Created by xzy on 18/7/17  .
