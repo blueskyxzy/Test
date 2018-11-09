@@ -9,6 +9,10 @@ public class TestHashMapClient {
         Map<Integer, String> map = new HashMap<>();
         map.put(1, "11111111");
         System.out.println(map.get(1));
+
+        Map<Integer, String> myMap = new HashMap<>();
+        myMap.put(1,"11111111111111");
+        System.out.println(myMap.get(1));
     }
 
 }

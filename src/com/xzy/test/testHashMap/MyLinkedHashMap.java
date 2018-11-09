@@ -16,7 +16,7 @@ public class MyLinkedHashMap<K,V>
 {
 
     static class Entry<K,V> extends MyHashMap.Node<K,V> {
-        MyLinkedHashMap.Entry<K,V> before, after;
+        Entry<K,V> before, after;
         Entry(int hash, K key, V value, Node<K,V> next) {
             super(hash, key, value, next);
         }
@@ -501,12 +501,12 @@ public class MyLinkedHashMap<K,V>
             throw new ConcurrentModificationException();
     }
 
-    abstract class LinkedHashIterator {
+    abstract class MyLinkedHashIterator {
         MyLinkedHashMap.Entry<K,V> next;
         MyLinkedHashMap.Entry<K,V> current;
         int expectedModCount;
 
-        LinkedHashIterator() {
+        MyLinkedHashIterator() {
             next = head;
             expectedModCount = modCount;
             current = null;
@@ -540,17 +540,17 @@ public class MyLinkedHashMap<K,V>
         }
     }
 
-    final class LinkedKeyIterator extends MyLinkedHashMap.LinkedHashIterator
+    final class LinkedKeyIterator extends MyLinkedHashIterator
             implements Iterator<K> {
         public final K next() { return nextNode().getKey(); }
     }
 
-    final class LinkedValueIterator extends MyLinkedHashMap.LinkedHashIterator
+    final class LinkedValueIterator extends MyLinkedHashIterator
             implements Iterator<V> {
         public final V next() { return nextNode().value; }
     }
 
-    final class LinkedEntryIterator extends MyLinkedHashMap.LinkedHashIterator
+    final class LinkedEntryIterator extends MyLinkedHashMap.MyLinkedHashIterator
             implements Iterator<Map.Entry<K,V>> {
         public final Map.Entry<K,V> next() { return nextNode(); }
     }
