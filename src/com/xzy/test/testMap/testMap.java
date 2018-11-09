@@ -1,6 +1,7 @@
 package com.xzy.test.testMap;
 
-import ;
+import com.xzy.test.testHashMap.MyHashMap;
+
 import java.util.Map;
 
 public class testMap {

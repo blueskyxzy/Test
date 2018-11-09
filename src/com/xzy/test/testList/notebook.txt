@@ -1,0 +1,73 @@
+ArrayList
+目的：保存同类型的多个数据     数据结构用数组
+
+泛型接收
+
+用什么存？
+    数组存，transient Object[] elementData;
+
+构造初始化怎么弄？
+    缺省的，elementData初始化为空数据
+
+怎么增删改查？
+    通过索引
+    private int size;
+    protected transient int modCount = 0
+
+    add方法：size++，数组对应位置存对象。
+        这样会溢出呀！所以存之前先扩容，默认是10   private static final int DEFAULT_CAPACITY = 10;
+        超过10了怎么办？1.5被扩容newCapacity = oldCapacity + (oldCapacity >> 1);
+        上限是MAX_ARRAY_SIZE=Integer.MAX_VALUE - 8，小于0抛错,大于设为Integer.MAX_VALUE。
+    size():返回size
+    add(int index, E element):
+        索引判断(index > size || index < 0)
+        System.arraycopy(elementData, index, elementData, index + 1, size - index);来实现数组复制，从索引位置右移一位
+        赋值，增加size
+    remove(int index)方法：
+        索引判断(index > size || index < 0)
+        System.arraycopy(elementData, index+1, elementData, index, numMoved)索引左移
+        最大size删除 elementData[--size] = null; // clear to let GC do its work
+    remove(Object o)：
+        遍历，用o.equals判断，找到相同就用上面的方式删，然后就返回。
+        equals用的是this == obj判断，就是用一个对象，不存在重复
+    get(int index)
+        索引判断(index > size || index < 0)
+        return elementData(index)
+
+
+Linkedlist
+目的：保存同类型的多个数据     数据结构用链表
+
+泛型接收
+
+怎么存数据？
+    链表存 transient int size = 0;
+    transient Node<E> first;
+    transient Node<E> last;
+    下面可以看出是双向链表
+        节点 private static class Node<E> {
+                   E item;
+                   Node<E> next;
+                   Node<E> prev;
+
+                   Node(Node<E> prev, E element, Node<E> next) {
+                       this.item = element;
+                       this.next = next;
+                       this.prev = prev;
+                  }
+             }
+
+构造初始过程？
+    缺省的，无操作
+
+add(E e)方法：
+    last = new Node<>(l, e, null);
+    并修复first,l的链
+    计数size++;modCount++
+add(int index, E element）:
+    检查index有没有越界
+    从first开始遍历，找到第index个node的值，然后就是插入链表的操作了
+......不再叙述，全是双向链表的操作
+
+
+
