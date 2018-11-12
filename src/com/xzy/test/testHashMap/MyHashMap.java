@@ -463,10 +463,10 @@ public class MyHashMap<K,V> extends MyAbstractMap<K,V>
 
     public Set<K> keySet() {
         Set<K> ks = super.keySet();
-//        if (ks == null) {
-//            ks = new KeySet();
-//            keySet = ks;
-//        }
+        if (ks == null) {
+            ks = new KeySet();
+            keySet = ks;
+        }
         return ks;
     }
 
@@ -499,10 +499,10 @@ public class MyHashMap<K,V> extends MyAbstractMap<K,V>
 
     public Collection<V> values() {
         Collection<V> vs = super.values();
-//        if (vs == null) {
-//            vs = new Values();
-//            values = vs;
-//        }
+        if (vs == null) {
+            vs = new Values();
+            values = vs;
+        }
         return vs;
     }
 
