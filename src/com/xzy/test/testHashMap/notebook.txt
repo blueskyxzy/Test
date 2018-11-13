@@ -2,4 +2,48 @@ HashMap
 目的：存键值对
 
 用什么数据结构存数据？ 数组+单向链表
+    static final int DEFAULT_INITIAL_CAPACITY = 1 << 4; // aka 16
+    static final int MAXIMUM_CAPACITY = 1 << 30;
+    static final float DEFAULT_LOAD_FACTOR = 0.75f;
+    static final int TREEIFY_THRESHOLD = 8;
+    static final int UNTREEIFY_THRESHOLD = 6;
+    static final int MIN_TREEIFY_CAPACITY = 64;
+    transient int size;
+    transient int modCount;
+    int threshold;
+    final float loadFactor;
+    transient Node<K,V>[] table; 单向链表数组存
+    transient Set<Entry<K,V>> entrySet; 存entrySet
+    static class Node<K,V> implements Map.Entry<K,V> {
+        final int hash;
+        final K key;
+        V value;
+        Node<K,V> next;
+        ......
+       }
+
+怎么初始化？
+V put(K key, V value)
+    public V put(K key, V value) {
+            return putVal(hash(key), key, value, false, true);
+        }
+    static final int hash(Object key) {
+            int h;
+            return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
+        }
+    Node<K,V>[] resize() 初始化方法
+    1.初次add,数组为null或者长度为0，if ((tab = table) == null || (n = tab.length) == 0)，resize()创建长度为16的的单链数组
+    2.再add,length<16*0.75,那么加个newNode
+    3.再add,length>=threshold,threshold和length都增加一倍
+    if ((p = tab[i = (n - 1) & hash]) == null)
+        hash相同，判断key是否相同且不同于null,if (p.hash == hash &&((k = p.key) == key || (key != null && key.equals(k))))
+        key相同则覆盖原来的value
+    key不同，判断是不是树节点 p instanceof TreeNode，就新建叶子节点
+        e = ((TreeNode<K,V>)p).putTreeVal(this, tab, hash, key, value);
+    不属于二叉树，一直遍历看链的next节点，hash,key相同的链旧覆盖。next节点为null,就新建节点，如果链长度大于等于8，就新建树
+        if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st
+            treeifyBin(tab, hash);break;
+
+
+
 
