@@ -11,7 +11,16 @@ public class TestHashMapClient {
         System.out.println(map.get(1));
 
         Map<Integer, String> myMap = new MyHashMap<>();
-        myMap.put(1,"11111111111111");
+//        for(int i = 0; i<=20; i++){
+//            myMap.put(i, "1111111111111111");
+//        }
+//        Map<String, String> stringMap = new MyHashMap<>();
+//        for(int i = 0;i <= 20; i++){
+//            stringMap.put(String.valueOf(i), "2222222222222");
+//        }
+        for (int i =0; i <= 20; i++){
+            myMap.put(1, String.valueOf(i));
+        }
         System.out.println(myMap.get(1));
     }
 
