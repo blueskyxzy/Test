@@ -27,6 +27,11 @@ V put(K key, V value)
     public V put(K key, V value) {
             return putVal(hash(key), key, value, false, true);
         }
+    hash值，并不仅仅只是key对象的hashCode()方法的返回值，还会经过扰动函数的扰动，以使hash值更加均衡。
+    hash值是一个int类型的数据 大小在-2147483648到2147483648 看结果就知道map是无法存放这么大角标的数据
+    hashmap最大MAXIMUM_CAPACITY = 1 << 30;为什么不是2的31次幂那么大呢？应该最大为为符号位
+    所有的hash值都与自身进行了异或并且自身异位
+    目的就在于你求于的时候包含了高16位和低16位的特性 也就是说你所计算出来的hash值包含从而使得你的hash值更加不确定 来降低碰撞的概率
     static final int hash(Object key) {
             int h;
             return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
@@ -35,13 +40,13 @@ V put(K key, V value)
     1.初次add,数组为null或者长度为0，if ((tab = table) == null || (n = tab.length) == 0)，resize()创建长度为16的的单链数组
     2.再add,length<16*0.75,那么加个newNode
     3.再add,length>=threshold,threshold和length都增加一倍
-    if ((p = tab[i = (n - 1) & hash]) == null)
+    if ((p = tab[i = (n - 1) & hash]) == null)      据key的hash值寻找对应的哈希桶时，可以用位运算替代取余操作
         hash相同，判断key是否相同且不同于null,if (p.hash == hash &&((k = p.key) == key || (key != null && key.equals(k))))
         key相同则覆盖原来的value
     key不同，判断是不是树节点 p instanceof TreeNode，就新建叶子节点
         e = ((TreeNode<K,V>)p).putTreeVal(this, tab, hash, key, value);
     不属于二叉树，一直遍历看链的next节点，hash,key相同的链旧覆盖。next节点为null,就新建节点，如果链长度大于等于8，就新建树
-        if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st
+        if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st  当链表长度达到8，会转化成红黑树，以提升它的查询、插入效率
             treeifyBin(tab, hash);break;
 
 
