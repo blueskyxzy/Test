@@ -41,6 +41,8 @@ V put(K key, V value)
     2.再add,length<16*0.75,那么加个newNode
     3.再add,length>=threshold,threshold和length都增加一倍
     if ((p = tab[i = (n - 1) & hash]) == null)      据key的hash值寻找对应的哈希桶时，可以用位运算替代取余操作
+        而且实际测试发现(n - 1) & hash是从0，1开始的，体现了hash算法的厉害之处
+
         hash相同，判断key是否相同且不同于null,if (p.hash == hash &&((k = p.key) == key || (key != null && key.equals(k))))
         key相同则覆盖原来的value
     key不同，判断是不是树节点 p instanceof TreeNode，就新建叶子节点
