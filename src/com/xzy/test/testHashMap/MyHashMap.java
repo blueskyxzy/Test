@@ -280,68 +280,101 @@ public class MyHashMap<K,V> extends MyAbstractMap<K,V>
     }
 
     final Node<K,V>[] resize() {
+        //oldTab 为当前表的哈希桶
         Node<K,V>[] oldTab = table;
+        //当前哈希桶的容量 length
         int oldCap = (oldTab == null) ? 0 : oldTab.length;
+        //当前的阈值
         int oldThr = threshold;
+        //初始化新的容量和阈值为0
         int newCap, newThr = 0;
+        //如果当前容量大于0
         if (oldCap > 0) {
+            //如果当前容量已经到达上限
             if (oldCap >= MAXIMUM_CAPACITY) {
+                //则设置阈值是2的31次方-1
                 threshold = Integer.MAX_VALUE;
+                //同时返回当前的哈希桶，不再扩容
                 return oldTab;
-            }
+            }//否则新的容量为旧的容量的两倍。
             else if ((newCap = oldCap << 1) < MAXIMUM_CAPACITY &&
-                    oldCap >= DEFAULT_INITIAL_CAPACITY)
+                    oldCap >= DEFAULT_INITIAL_CAPACITY)//如果旧的容量大于等于默认初始容量16
+                //那么新的阈值也等于旧的阈值的两倍
                 newThr = oldThr << 1; // double threshold
-        }
+        }//如果当前表是空的，但是有阈值。代表是初始化时指定了容量、阈值的情况
         else if (oldThr > 0) // initial capacity was placed in threshold
-            newCap = oldThr;
-        else {               // zero initial threshold signifies using defaults
-            newCap = DEFAULT_INITIAL_CAPACITY;
-            newThr = (int)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);
+            newCap = oldThr;//那么新表的容量就等于旧的阈值
+        else {
+            //如果当前表是空的，而且也没有阈值。代表是初始化时没有任何容量/阈值参数的情况               // zero initial threshold signifies using defaults
+            newCap = DEFAULT_INITIAL_CAPACITY;//此时新表的容量为默认的容量 16
+            newThr = (int)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);//新的阈值为默认容量16 * 默认加载因子0.75f = 12
         }
         if (newThr == 0) {
-            float ft = (float)newCap * loadFactor;
+            //如果新的阈值是0，对应的是  当前表是空的，但是有阈值的情况
+            float ft = (float)newCap * loadFactor;//根据新表容量 和 加载因子 求出新的阈值
+            //进行越界修复
             newThr = (newCap < MAXIMUM_CAPACITY && ft < (float)MAXIMUM_CAPACITY ?
                     (int)ft : Integer.MAX_VALUE);
         }
+        //更新阈值
         threshold = newThr;
         @SuppressWarnings({"rawtypes","unchecked"})
-        Node<K,V>[] newTab = (Node<K,V>[])new Node[newCap];
+        //根据新的容量 构建新的哈希桶
+                Node<K,V>[] newTab = (Node<K,V>[])new Node[newCap];
+        //更新哈希桶引用
         table = newTab;
-        if (oldTab != null) {
+        //如果以前的哈希桶中有元素
+        //下面开始将当前哈希桶中的所有节点转移到新的哈希桶中
+            if (oldTab != null) {
+            //遍历老的哈希桶
             for (int j = 0; j < oldCap; ++j) {
+                //取出当前的节点 e
                 Node<K,V> e;
+                //如果当前桶中有元素,则将链表赋值给e
                 if ((e = oldTab[j]) != null) {
+                    //将原哈希桶置空以便GC
                     oldTab[j] = null;
+                    //如果当前链表中就一个元素，（没有发生哈希碰撞）
                     if (e.next == null)
+                        //直接将这个元素放置在新的哈希桶里。
+                        //注意这里取下标 是用 哈希值 与 桶的长度-1 。 由于桶的长度是2的n次方，这么做其实是等于 一个模运算。但是效率更高
                         newTab[e.hash & (newCap - 1)] = e;
+                        //如果发生过哈希碰撞 ,而且是节点数超过8个，转化成了红黑树（暂且不谈 避免过于复杂， 后续专门研究一下红黑树）
                     else if (e instanceof TreeNode)
                         ((TreeNode<K,V>)e).split(this, newTab, j, oldCap);
+                        //如果发生过哈希碰撞，节点数小于8个。则要根据链表上每个节点的哈希值，依次放入新哈希桶对应下标位置。
                     else { // preserve order
+                        //因为扩容是容量翻倍，所以原链表上的每个节点，现在可能存放在原来的下标，即low位， 或者扩容后的下标，即high位。 high位=  low位+原哈希桶容量
+                        //低位链表的头结点、尾节点
                         Node<K,V> loHead = null, loTail = null;
+                        //高位链表的头节点、尾节点
                         Node<K,V> hiHead = null, hiTail = null;
-                        Node<K,V> next;
+                        Node<K,V> next;//临时节点 存放e的下一个节点
                         do {
                             next = e.next;
+                            //这里又是一个利用位运算 代替常规运算的高效点： 利用哈希值 与 旧的容量，可以得到哈希值去模后，是大于等于oldCap还是小于oldCap，等于0代表小于oldCap，应该存放在低位，否则存放在高位
                             if ((e.hash & oldCap) == 0) {
+                                //给头尾节点指针赋值
                                 if (loTail == null)
                                     loHead = e;
                                 else
                                     loTail.next = e;
                                 loTail = e;
-                            }
+                            }//高位也是相同的逻辑
                             else {
                                 if (hiTail == null)
                                     hiHead = e;
                                 else
                                     hiTail.next = e;
                                 hiTail = e;
-                            }
+                            }//循环直到链表结束
                         } while ((e = next) != null);
+                        //将低位链表存放在原index处，
                         if (loTail != null) {
                             loTail.next = null;
                             newTab[j] = loHead;
                         }
+                        //将高位链表存放在新index处
                         if (hiTail != null) {
                             hiTail.next = null;
                             newTab[j + oldCap] = hiHead;
@@ -350,8 +383,82 @@ public class MyHashMap<K,V> extends MyAbstractMap<K,V>
                 }
             }
         }
-        return newTab;
+            return newTab;
     }
+
+//    final Node<K,V>[] resize() {
+//        Node<K,V>[] oldTab = table;
+//        int oldCap = (oldTab == null) ? 0 : oldTab.length;
+//        int oldThr = threshold;
+//        int newCap, newThr = 0;
+//        if (oldCap > 0) {
+//            if (oldCap >= MAXIMUM_CAPACITY) {
+//                threshold = Integer.MAX_VALUE;
+//                return oldTab;
+//            }
+//            else if ((newCap = oldCap << 1) < MAXIMUM_CAPACITY &&
+//                    oldCap >= DEFAULT_INITIAL_CAPACITY)
+//                newThr = oldThr << 1; // double threshold
+//        }
+//        else if (oldThr > 0) // initial capacity was placed in threshold
+//            newCap = oldThr;
+//        else {               // zero initial threshold signifies using defaults
+//            newCap = DEFAULT_INITIAL_CAPACITY;
+//            newThr = (int)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);
+//        }
+//        if (newThr == 0) {
+//            float ft = (float)newCap * loadFactor;
+//            newThr = (newCap < MAXIMUM_CAPACITY && ft < (float)MAXIMUM_CAPACITY ?
+//                    (int)ft : Integer.MAX_VALUE);
+//        }
+//        threshold = newThr;
+//        @SuppressWarnings({"rawtypes","unchecked"})
+//        Node<K,V>[] newTab = (Node<K,V>[])new Node[newCap];
+//        table = newTab;
+//        if (oldTab != null) {
+//            for (int j = 0; j < oldCap; ++j) {
+//                Node<K,V> e;
+//                if ((e = oldTab[j]) != null) {
+//                    oldTab[j] = null;
+//                    if (e.next == null)
+//                        newTab[e.hash & (newCap - 1)] = e;
+//                    else if (e instanceof TreeNode)
+//                        ((TreeNode<K,V>)e).split(this, newTab, j, oldCap);
+//                    else { // preserve order
+//                        Node<K,V> loHead = null, loTail = null;
+//                        Node<K,V> hiHead = null, hiTail = null;
+//                        Node<K,V> next;
+//                        do {
+//                            next = e.next;
+//                            if ((e.hash & oldCap) == 0) {
+//                                if (loTail == null)
+//                                    loHead = e;
+//                                else
+//                                    loTail.next = e;
+//                                loTail = e;
+//                            }
+//                            else {
+//                                if (hiTail == null)
+//                                    hiHead = e;
+//                                else
+//                                    hiTail.next = e;
+//                                hiTail = e;
+//                            }
+//                        } while ((e = next) != null);
+//                        if (loTail != null) {
+//                            loTail.next = null;
+//                            newTab[j] = loHead;
+//                        }
+//                        if (hiTail != null) {
+//                            hiTail.next = null;
+//                            newTab[j + oldCap] = hiHead;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        return newTab;
+//    }
 
     /**
      * Replaces all linked nodes in bin at index for given hash unless
