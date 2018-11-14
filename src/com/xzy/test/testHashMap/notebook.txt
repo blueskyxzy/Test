@@ -1,4 +1,9 @@
 HashMap
+总结：
+1.结构是数组+单链表，又称为哈希堆
+2.根据hash值来确定索引，hash通过低16位异或保留原高16位和低16位的特性，并让hash更加不确定 来降低碰撞的概率,再通过低位位与来完成取余
+3.hash相同，key不同时，增加链表长度。当链表长度达到8，会转化成红黑树，以提升它的查询、插入效率
+
 目的：存键值对
 
 用什么数据结构存数据？ 数组+单向链表
@@ -28,10 +33,11 @@ V put(K key, V value)
             return putVal(hash(key), key, value, false, true);
         }
     hash值，并不仅仅只是key对象的hashCode()方法的返回值，还会经过扰动函数的扰动，以使hash值更加均衡。
+    就是hash高16位保留，低16位与高16位异或。  异或作用：虽然值变了，但是保留了之前两个值的特性，再异或会恢复成原来的值。
     hash值是一个int类型的数据 大小在-2147483648到2147483648 看结果就知道map是无法存放这么大角标的数据
     hashmap最大MAXIMUM_CAPACITY = 1 << 30;为什么不是2的31次幂那么大呢？应该最大为为符号位
     所有的hash值都与自身进行了异或并且自身异位
-    目的就在于你求于的时候包含了高16位和低16位的特性 也就是说你所计算出来的hash值包含从而使得你的hash值更加不确定 来降低碰撞的概率
+    目的就在于你求余的时候包含了高16位和低16位的特性 也就是说你所计算出来的hash值包含从而使得你的hash值更加不确定 来降低碰撞的概率
     static final int hash(Object key) {
             int h;
             return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
@@ -40,8 +46,8 @@ V put(K key, V value)
     1.初次add,数组为null或者长度为0，if ((tab = table) == null || (n = tab.length) == 0)，resize()创建长度为16的的单链数组
     2.再add,length<16*0.75,那么加个newNode
     3.再add,length>=threshold,threshold和length都增加一倍
-    if ((p = tab[i = (n - 1) & hash]) == null)      据key的hash值寻找对应的哈希桶时，可以用位运算替代取余操作
-        而且实际测试发现(n - 1) & hash是从0，1开始的，体现了hash算法的厉害之处
+    if ((p = tab[i = (n - 1) & hash]) == null)    通过低位位与与将hash值进行求余  据key的hash值寻找对应的哈希桶时，可以用位运算替代取余操作
+        而且实际测试发现(n - 1) & hash是从0开始的，体现了hash算法的厉害之处
 
         hash相同，判断key是否相同且不同于null,if (p.hash == hash &&((k = p.key) == key || (key != null && key.equals(k))))
         key相同则覆盖原来的value
