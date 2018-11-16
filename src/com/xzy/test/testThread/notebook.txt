@@ -1,0 +1,38 @@
+进程 和 线程
+    1对多
+指令
+
+线程上下文切换
+多核CPU处理
+
+线程的使用
+    1.继承Thread
+    2.实现Runnable
+    3.FutureTask/callable
+    4.ExecutorPool
+线程的生命周期  线程状态
+    Thread.png
+    Thread2.png
+
+线程状态转换
+    线程在Running的过程中可能会遇到阻塞(Blocked)情况
+    1.调用join()和sleep()方法，sleep()时间结束或被打断，join()中断,IO完成都会回到Runnable状态，等待JVM的调度。
+    2.调用wait()，使该线程处于等待池(wait blocked pool),直到notify()/notifyAll()，线程被唤醒被放到锁定池(lock blocked pool )，释放同步锁使线程回到可运行状态（Runnable）
+    3.对Running状态的线程加同步锁(Synchronized)使其进入(lock blocked pool ),同步锁被释放进入可运行状态(Runnable)。
+    此外，在runnable状态的线程是处于被调度的线程，此时的调度顺序是不一定的。Thread类中的yield方法可以让一个running状态的线程转入runnable
+
+并行：多个cpu实例或者多台机器同时执行一段处理逻辑，是真正的同时。
+并发：通过cpu调度算法，让用户看上去同时执行，实际上从cpu操作层面不是真正的同时。
+并发往往在场景中有公用的资源，那么针对这个公用的资源往往产生瓶颈，我们会用TPS或者QPS来反应这个系统的处理能力
+
+线程安全:并发的情况之下，该代码经过多线程使用，线程的调度顺序不影响任何结果
+
+同步:通过人为的控制和调度，保证共享资源的多线程访问成为线程安全.如加入@synchronized关键字
+
+synochronized
+    代码块
+    用于方法
+
+不能用try,catch来获取线程中的异常
+
+
