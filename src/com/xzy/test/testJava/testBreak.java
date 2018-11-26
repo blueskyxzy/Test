@@ -29,22 +29,25 @@ public class testBreak {
 
         XYOBJ xyobj1 = new XYOBJ(1L, 2L);
         xyList.add(xyobj1);
-        for (Long x: xList){
-            for (Long y : yList){
-                boolean needAdd = true;
-                for (XYOBJ xyobj :xyList){
-                    Long xInDB = xyobj.getX();
-                    Long yInDB = xyobj.getY();
-                    if (xInDB.equals(x) && yInDB.equals(y)) {
-                        needAdd = false;
-                        break;
+        if((xList.size() * yList.size()) > xyList.size()){
+            for (Long x: xList){
+                for (Long y : yList){
+                    boolean needAdd = true;
+                    for (XYOBJ xyobj :xyList){
+                        Long xInDB = xyobj.getX();
+                        Long yInDB = xyobj.getY();
+                        if (xInDB.equals(x) && yInDB.equals(y)) {
+                            needAdd = false;
+                            break;
+                        }
                     }
-                }
-                if (needAdd){
-                    System.out.println("need create x:" + x + ",y:" + y);
+                    if (needAdd){
+                        System.out.println("need create x:" + x + ",y:" + y);
+                    }
                 }
             }
         }
+
     }
 
 }
