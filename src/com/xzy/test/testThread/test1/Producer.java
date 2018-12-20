@@ -1,19 +1,26 @@
 package com.xzy.test.testThread.test1;
 
 /**
- * Created by xzy on 18/12/18  .
+ * Created by xzy on 18/12/19  .
  */
 
-public class Producer {
+// 生产者
+public class Producer implements Runnable{
 
-    private String pic;
+    private Movie movie;
 
-    public void consumer(String pic){
-       this.pic = pic;
-        System.out.println("pic:" + pic);
+    public Producer(Movie movie) {
+        this.movie = movie;
     }
 
-    public void watch(){
-        System.out.println("watch:" + pic);
+    @Override
+    public void run() {
+        for(int i = 0; i < 20; i++){
+            if(i%2==0){
+                movie.produce("偶数");
+            } else {
+                movie.produce("奇数");
+            }
+        }
     }
 }

@@ -4,20 +4,22 @@ package com.xzy.test.testThread.test1;
  * Created by xzy on 18/12/19  .
  */
 
+// 消费者
 public class Watcher implements Runnable{
-    public Watcher(Producer producer) {
-        this.producer = producer;
+
+    public Watcher(Movie movie) {
+        this.movie = movie;
     }
 
-    private Producer producer;
+    private Movie movie;
 
     @Override
     public void run() {
         for(int i = 0; i < 20; i++){
             if(i%2==0){
-                producer.watch();
+                movie.consume();
             } else {
-                producer.watch();
+                movie.consume();
             }
         }
     }
