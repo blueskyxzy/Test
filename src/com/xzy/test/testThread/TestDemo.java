@@ -8,6 +8,8 @@ import com.xzy.test.testThread.test2.Repertory;
  * Created by xzy on 18/12/21  .
  */
 
+// 使用while和notifyAll，synchronized解决多线程访问
+
 public class TestDemo {
     public static void main(String[] args) {
         //定义一个仓库,消费者和生产者都使用这一个仓库

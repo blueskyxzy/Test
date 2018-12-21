@@ -112,4 +112,31 @@ Java多线程中调用wait() 和 sleep()方法有什么不同？
     wait()方法用于线程间通信，如果等待条件为真且其它线程被唤醒时它会释放锁，而sleep()方法仅仅释放CPU资源或者让当前线程停止执行一段时间，但不会释放锁
 
 
+多生产多消费问题解决方案：
+方案1，使用while和notifyAll，synchronized解决多线程访问
+如test2
+问题：没处理好，容易出现死锁
 
+方案2，解决改进1)的问题
+
+升级版：
+使用Lock来替换synchronized，wait,notify,nonifyAll语法和语句的使用
+不需要同步，不需要notify
+
+记得需要导包：
+
+java.util.concurrent.locks
+ 主要改动：
+
+  自定义锁   ---》 Condition对象 --》signallAll
+
+  condition.await()   === try{this.wait();}catch(Exception e){}
+
+  synchronized删除，异常抛出，使用finally解锁
+
+
+方案3，在方案2的基础上解决改进2)的问题
+
+加强升级版：
+
+此版本为最终版，主要在使用锁lock的基础上，加上唤醒对方（不包括己方)进程的优化
