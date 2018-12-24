@@ -218,7 +218,7 @@ public void method() throws InterruptedException {
 
 
 ReentrantLock 可重入锁,ReentrantLock是唯一实现了Lock接口的类，并且ReentrantLock提供了更多的方法
-lock不能放到run方法的局部变量，
+lock不能放到run方法的局部变量，一般放在类的成员变量
 
 如果一个代码块被synchronized修饰了，当一个线程获取了对应的锁，并执行该代码块时，其他线程便只能一直等待，等待获取锁的线程释放锁，而这里获取锁的线程释放锁只会有两种情况：
 
