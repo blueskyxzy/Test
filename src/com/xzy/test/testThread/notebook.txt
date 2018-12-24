@@ -171,7 +171,7 @@ ReentrantLock获取锁定与三种方式：
 
 
 java.util.concurrent.locks包中常用的类和接口:
-lock()、tryLock()、tryLock(long time, TimeUnit unit)和lockInterruptibly()是用来获取锁的。unLock()方法是用来释放锁的。
+lock()、tryLock()、tryLock(long time, TimeUnit unit)和lockInterruptibly()是用来获取锁的。unLock()方法是用来释放锁的。new condition可以用来线程协作
 lock()方法是平常使用得最多的一个方法，就是用来获取锁。如果锁已被其他线程获取，则进行等待
 通常使用Lock来进行同步的话，是以下面这种形式去使用的：
 Lock lock = ...;
