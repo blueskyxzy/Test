@@ -23,7 +23,8 @@ package com.xzy.test.programmingofinterview;
 //        输出一个数，表示最少需要的转换次数
 //
 //        输入例子1:
-//        4 1 1 1 3
+//        4
+//        1 1 1 3
 //
 //        输出例子1:
 //        2
