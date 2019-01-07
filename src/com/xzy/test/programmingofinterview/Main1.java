@@ -27,49 +27,49 @@ import java.util.Scanner;
 
 public class Main1 {
 
-    //    public static void main(String[] args){
-//        Scanner input = new Scanner(System.in);
-//        String str = input.nextLine();
-//        int x = Integer.parseInt(str);
-//        long startTime = System.nanoTime();
-//        int y = calcuatePoint(x);
-//        System.out.println(y);
-//        long endTime = System.nanoTime();
-//        System.out.println("程序运行时间： "+(endTime - startTime)+"ns");
-//    }
-//
-//    public static int calcuatePoint(int x){
-//        int a = (int) Math.sqrt(x);
-//        int count = 0;
-//        for (int i = -a; i <= a; i++){
-//            for (int j = -a; j <= a; j++){
-//                if (Math.pow(i, 2) + Math.pow(j, 2) == x){
-//                    count++;
-//                }
-//            }
-//        }
-//        return count;
-//    }
+/*        public static void main(String[] args){
+        Scanner input = new Scanner(System.in);
+        String str = input.nextLine();
+        int x = Integer.parseInt(str);
+        long startTime = System.nanoTime();
+        int y = calcuatePoint(x);
+        System.out.println(y);
+        long endTime = System.nanoTime();
+        System.out.println("程序运行时间： "+(endTime - startTime)+"ns");
+    }
+
+    public static int calcuatePoint(int x){
+        int a = (int) Math.sqrt(x);
+        int count = 0;
+        for (int i = -a; i <= a; i++){
+            for (int j = -a; j <= a; j++){
+                if (Math.pow(i, 2) + Math.pow(j, 2) == x){
+                    count++;
+                }
+            }
+        }
+        return count;
+    }*/
 
 
-//    解答一
-//    public static void main(String[] args) {
-//        Scanner scan = new Scanner(System.in);
-//        int n = scan.nextInt();
-//        System.out.println(count(n));
-//    }
-//
-//    public static int count(int n) {
-//        int count = 0;
-//        double r = Math.sqrt(n);
-//        for (int i = 0; i < r; i++) {
-//            double j = Math.sqrt(n - i * i);
-//            if (Math.abs(j - Math.round(j)) <= 0.000000001) {
-//                count++;
-//            }
-//        }
-//        return 4 * count;
-//    }
+/*    解答一
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        System.out.println(count(n));
+    }
+
+    public static int count(int n) {
+        int count = 0;
+        double r = Math.sqrt(n);
+        for (int i = 0; i < r; i++) {
+            double j = Math.sqrt(n - i * i);
+            if (Math.abs(j - Math.round(j)) <= 0.000000001) {
+                count++;
+            }
+        }
+        return 4 * count;
+    }*/
 
 //    解答2
     public static void main(String[] args) {
