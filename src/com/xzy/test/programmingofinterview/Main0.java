@@ -1,5 +1,7 @@
 package com.xzy.test.programmingofinterview;
 
+import java.util.Scanner;
+
 /**
  * Created by xzy on 19/1/2  .
  */
@@ -31,8 +33,68 @@ package com.xzy.test.programmingofinterview;
 
 public class Main0 {
 
-    public static void main(String[] args){
-
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int times = 0;
+            int n = scanner.nextInt();
+            int[] inputArr = new int[n];
+            for (int i = 0; i < n; i++) {
+                inputArr[i] = scanner.nextInt();
+            }
+            int head = 0;
+            int tail = n - 1;
+            while (head < tail) {
+                if (inputArr[head] > inputArr[tail]) {
+                    inputArr[--tail] += inputArr[tail + 1];
+                    times++;
+                } else if (inputArr[head] < inputArr[tail]) {
+                    inputArr[++head] += inputArr[head - 1];
+                    times++;
+                } else {
+                    head++;
+                    tail--;
+                }
+            }
+            System.out.println(times);
+        }
+        scanner.close();
     }
+
+//
+//    public static int transform(int[] arr) {
+//        int i = 0;
+//        int j = arr.length - 1;
+//        int times = 0;
+//        while (i < j) {
+//            if (arr[i] == arr[j]) {
+//                i++;
+//                j--;
+//            } else {
+//                if (arr[i] > arr[j]) {
+//                    arr[j - 1] += arr[j];
+//                    j--;
+//                    times++;
+//                } else {
+//                    arr[i + 1] += arr[i];
+//                    i++;
+//                    times++;
+//                }
+//            }
+//        }
+//        return times;
+//    }
+//
+//    public static void main(String[] args) {
+//        Scanner sc = new Scanner(System.in);
+//        while (sc.hasNext()) {
+//            int loop = sc.nextInt();
+//            int[] arr = new int[loop];
+//            for (int i = 0; i < arr.length; i++) {
+//                arr[i] = sc.nextInt();
+//            }
+//            System.out.println(transform(arr));
+//        }
+//    }
 
 }
