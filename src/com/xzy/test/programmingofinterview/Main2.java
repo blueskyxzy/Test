@@ -80,6 +80,7 @@ public class Main2 {
 
 
 
+/*
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -136,13 +137,17 @@ public class Main2 {
         }
         return list;
     }
+*/
 
 
+/*
+    采用动态规划思想求解。创建一个容器steps，steps[i]表示到达i号石板所需的最小步数。初始化为steps容器为INT_MAX。从序号N的石板开始逐个遍历，若steps[i]为INT_MAX，表示该点不可到达，直接开始下次循环。若steps[i]不为INT_MAX，表示该点可以到达，下面求解编号i的约数，进行动态规划。动态规划的转移方程为
 
+    steps[i+j] = min(steps[i]+1,steps[i+j])   //i为石板编号，j为i的约束
+    steps[N] = 0
+*/
 
-
-
-/*    public static int deal(int m, int n) {//m到n
+    public static int deal(int m, int n) {//m到n
         int mark[] = new int[n + 1];//记录到达每一个位置的步数
         for (int i = m + 1; i <= n; i++) {                          //初始化
             mark[i] = Integer.MAX_VALUE;
@@ -179,7 +184,7 @@ public class Main2 {
         int r = deal(m, n);
         if (r == Integer.MAX_VALUE) r = -1;
         System.out.println(r);
-    }*/
+    }
 }
 
 
