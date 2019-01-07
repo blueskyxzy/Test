@@ -35,7 +35,7 @@ import java.util.Scanner;
 
 public class Main2 {
 
-    public static void main(String[] args){
+/*    public static void main(String[] args){
         Scanner s= new Scanner(System.in);
         int x = s.nextInt();
         int y = s.nextInt();
@@ -74,7 +74,117 @@ public class Main2 {
             }
         }
         return xx;
+    }*/
+
+
+
+
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int n = scanner.nextInt();
+            int m = scanner.nextInt();
+            System.out.println(leastJumpTime(n, m));
+        }
     }
+
+/*
+    采用动态规划思想求解。创建一个vector容器steps，steps[i]表示到达i号石板所需的最小步数。初始化为steps容器为INT_MAX。从序号N的石板开始逐个遍历，若steps[i]为INT_MAX，表示该点不可到达，直接开始下次循环。若steps[i]不为INT_MAX，表示该点可以到达，下面求解编号i的约数，进行动态规划。动态规划的转移方程为
+
+    steps[i+j] = min(steps[i]+1,steps[i+j])   //i为石板编号，j为i的约束
+    steps[N] = 0
+*/
+
+    // 思想：动态规划
+    public static int leastJumpTime(int n, int m) {
+        if (m == n) {
+            return 0;
+        }
+        int steps = m - n + 1;// 算上了起点和终点
+        int[] dp = new int[steps];// 规划的量：到达 每个位置需要的最小步数
+        dp[0] = 0; // 起点
+        for (int i = 1; i < steps; i++) {
+            dp[i] = Integer.MAX_VALUE; // 初始化 表示后续位置都不能到达
+        }
+        for (int i = 0; i < steps; i++) {
+            // 0对应n石板 ；steps - 1 = m-n对应m石板
+            if (dp[i] == Integer.MAX_VALUE) { // 该位置不能像前走
+                dp[i] = 0;
+                continue;
+            }
+            ArrayList<Integer> list = getAppNums(i + n); // i+n才是石板号
+            for (int j = 0; j < list.size(); j++) {
+                int x = list.get(j);
+                if (i + n + x <= m) {
+                    dp[i + x] = Math.min(dp[i + x], dp[i] + 1);
+                }
+            }
+        }
+        if (dp[steps - 1] == 0) {
+            return -1;
+        } else {
+            return dp[steps - 1];
+        }
+    }
+
+    // 求因数 时间复杂度较低
+    public static ArrayList<Integer> getAppNums(int n) {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        for (int i = 2; i <= Math.sqrt(n); i++) {
+            if (n % i == 0) {
+                list.add(i);
+                if (n / i != i) {
+                    list.add(n / i);
+                }
+            }
+        }
+        return list;
+    }
+
+
+
+
+
+
+/*    public static int deal(int m, int n) {//m到n
+        int mark[] = new int[n + 1];//记录到达每一个位置的步数
+        for (int i = m + 1; i <= n; i++) {                          //初始化
+            mark[i] = Integer.MAX_VALUE;
+        }
+        for (int i = m; i < n - 1; i++) {                         //填mark[]
+            if (mark[i] == Integer.MAX_VALUE) continue; //如果当前起始位置本身不可达 不作处理
+            ArrayList<Integer> list = allFactor(i);   //获得当前位置i的所有因子
+            for (int j = 0; j < list.size(); j++) {         //计算i能到达的每一个位置tmp
+                int tmp = i + list.get(j);
+                int count = mark[i] + 1;
+                if (tmp <= n && mark[tmp] > count) {        //如果从i到达位置tmp的次数比以前记录的小 更新mark[tmp]
+                    mark[tmp] = count;
+                }
+            }
+        }
+        return mark[n];
+    }
+
+    public static ArrayList<Integer> allFactor(int n) {//获得n的所有因子 除1 n外
+        ArrayList list = new ArrayList();
+        for (int i = 2; i <= Math.sqrt(n); i++) {
+            if (n % i == 0) {
+                list.add(i);
+                if (i != n / i) list.add(n / i);
+            }
+        }
+        return list;
+    }
+
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int m = sc.nextInt();
+        int n = sc.nextInt();
+        int r = deal(m, n);
+        if (r == Integer.MAX_VALUE) r = -1;
+        System.out.println(r);
+    }*/
 }
 
 
