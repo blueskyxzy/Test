@@ -1,5 +1,7 @@
 package com.xzy.test.programmingofinterview;
 
+import java.util.Scanner;
+
 /**
  * Created by xzy on 19/1/2  .
  */
@@ -31,6 +33,18 @@ package com.xzy.test.programmingofinterview;
 public class Main3 {
 
     public static void main(String[] args){
-
+        int n = 0;
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            n = scanner.nextInt();
+            int [] dp = new int[31];
+            dp[1] = 3;
+            dp[2] = 9;
+            for(int i = 3; i <= n; i++ )
+                dp[i] = 2*dp[i-1]+dp[i-2];
+            System.out.println(dp[n]);
+        }
     }
 }
+
+
