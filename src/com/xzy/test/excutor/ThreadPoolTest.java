@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by xzy on 2019/3/24  .
@@ -32,6 +33,8 @@ public class ThreadPoolTest {
 ////            thread.start();
 ////            thread.join();
 ////        }
+        executorService.shutdown();
+        executorService.awaitTermination(1, TimeUnit.DAYS);
         System.out.println(System.currentTimeMillis() - start);
         System.out.println(list.size());
         System.out.println("-----------------------------");
