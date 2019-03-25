@@ -106,6 +106,9 @@ public void execute(Runnable command) {
 
 addWorker方法：
 总结：
+两个for循环判断是否增加一个线程
+外循环来判断线程池的状态
+内循环主要是增加一个线程数的CAS操作
 private boolean addWorker(Runnable firstTask, boolean core) {
     retry:
     for (;;) {
