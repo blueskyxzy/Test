@@ -1,0 +1,174 @@
+线程池
+shutdown()
+将线程池状态置为SHUTDOWN,并不会立即停止：
+停止接收外部submit的任务
+内部正在跑的任务和队列里等待的任务，会执行完
+等到第二步完成后，才真正停止
+
+shutdownNow()
+将线程池状态置为STOP。企图立即停止，事实上不一定：
+跟shutdown()一样，先停止接收外部提交的任务
+忽略队列里等待的任务
+尝试将正在跑的任务interrupt中断
+返回未执行的任务列表
+
+awaitTermination(long timeOut, TimeUnit unit)
+当前线程阻塞，直到
+等所有已提交的任务（包括正在跑的和队列中等待的）执行完
+或者等超时时间到
+或者线程被中断，抛出InterruptedException
+然后返回true（shutdown请求后所有任务执行完毕）或false（已超时）
+
+
+shutdown()后，不能再提交新的任务进去；但是awaitTermination()后，可以继续提交。
+awaitTermination()是阻塞的，返回结果是线程池是否已停止（true/false）；shutdown()不阻塞。
+
+* 		优雅的关闭，用shutdown()
+* 		想立马关闭，并得到未执行任务列表，用shutdownNow()
+* 		优雅的关闭，并允许关闭声明后新任务能提交，用awaitTermination()
+
+java两种线程池
+scheduledThreadPoolExecutor和ThreadPoolExcutor
+
+抽象类abstractExecutorService  的 submit调用了的excute, 将执行和提交合并，submit有返回值，execute没有返回值
+
+public static ExecutorService newFixedThreadPool(int nThreads) {
+    return new ThreadPoolExecutor(nThreads, nThreads,
+                                  0L, TimeUnit.MILLISECONDS,
+                                  new LinkedBlockingQueue<Runnable>());
+}
+ThreadPoolExecutor参数，
+
+ThreadPoolExecutor(int corePoolSize,
+                          int maximumPoolSize,
+                          long keepAliveTime,  // 存活时间
+                          TimeUnit unit,
+                          BlockingQueue<Runnable> workQueue)
+
+ThreadPoolExecutor(int corePoolSize,
+                          int maximumPoolSize,
+                          long keepAliveTime,// 存活时间
+                          TimeUnit unit,
+                          BlockingQueue<Runnable> workQueue,
+                          ThreadFactory threadFactory,  // 线程工厂
+                          RejectedExecutionHandler handler  // handle处理)
+
+public class ThreadPoolExecutor extends AbstractExecutorService
+
+LinkedBlockingQueue实现
+
+
+execute方法
+ThreadPoolExecutor的excutor方法
+excutor方法执行流程：
+
+public void execute(Runnable command) {
+    if (command == null)
+        throw new NullPointerException();
+    /*
+     * Proceed in 3 steps:
+     *
+     * 1. If fewer than corePoolSize threads are running, try to
+     * start a new thread with the given command as its first
+     * task.  The call to addWorker atomically checks runState and
+     * workerCount, and so prevents false alarms that would add
+     * threads when it shouldn't, by returning false.
+     *
+     * 2. If a task can be successfully queued, then we still need
+     * to double-check whether we should have added a thread
+     * (because existing ones died since last checking) or that
+     * the pool shut down since entry into this method. So we
+     * recheck state and if necessary roll back the enqueuing if
+     * stopped, or start a new thread if there are none.
+     *
+     * 3. If we cannot queue task, then we try to add a new
+     * thread.  If it fails, we know we are shut down or saturated
+     * and so reject the task.
+     */
+    int c = ctl.get();
+    if (workerCountOf(c) < corePoolSize) {
+        if (addWorker(command, true))
+            return;
+        c = ctl.get();
+    }
+    if (isRunning(c) && workQueue.offer(command)) {
+        int recheck = ctl.get();
+        if (! isRunning(recheck) && remove(command))
+            reject(command);
+        else if (workerCountOf(recheck) == 0)
+            addWorker(null, false);
+    }
+    else if (!addWorker(command, false))
+        reject(command);
+}
+
+
+
+addWorker方法：
+总结：
+private boolean addWorker(Runnable firstTask, boolean core) {
+    retry:
+    for (;;) {
+        int c = ctl.get();
+        int rs = runStateOf(c);
+
+        // Check if queue empty only if necessary.
+        if (rs >= SHUTDOWN &&
+            ! (rs == SHUTDOWN &&
+               firstTask == null &&
+               ! workQueue.isEmpty()))
+            return false;
+
+        for (;;) {
+            int wc = workerCountOf(c);
+            if (wc >= CAPACITY ||
+                wc >= (core ? corePoolSize : maximumPoolSize))
+                return false;
+            if (compareAndIncrementWorkerCount(c))
+                break retry;
+            c = ctl.get();  // Re-read ctl
+            if (runStateOf(c) != rs)
+                continue retry;
+            // else CAS failed due to workerCount change; retry inner loop
+        }
+    }
+
+    boolean workerStarted = false;
+    boolean workerAdded = false;
+    Worker w = null;
+    try {
+        w = new Worker(firstTask);
+        final Thread t = w.thread;
+        if (t != null) {
+            final ReentrantLock mainLock = this.mainLock;
+            mainLock.lock();
+            try {
+                // Recheck while holding lock.
+                // Back out on ThreadFactory failure or if
+                // shut down before lock acquired.
+                int rs = runStateOf(ctl.get());
+
+                if (rs < SHUTDOWN ||
+                    (rs == SHUTDOWN && firstTask == null)) {
+                    if (t.isAlive()) // precheck that t is startable
+                        throw new IllegalThreadStateException();
+                    workers.add(w);
+                    int s = workers.size();
+                    if (s > largestPoolSize)
+                        largestPoolSize = s;
+                    workerAdded = true;
+                }
+            } finally {
+                mainLock.unlock();
+            }
+            if (workerAdded) {
+                t.start();
+                workerStarted = true;
+            }
+        }
+    } finally {
+        if (! workerStarted)
+            addWorkerFailed(w);
+    }
+    return workerStarted;
+}
