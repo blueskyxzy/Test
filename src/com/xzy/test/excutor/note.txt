@@ -175,3 +175,37 @@ private boolean addWorker(Runnable firstTask, boolean core) {
     }
     return workerStarted;
 }
+
+
+类锁和对象锁？
+对象锁（synchronized修饰方法或代码块），分两种情况，一种是synchronized method和synchronized(this)代码块，锁定的都是当前对象，两者是同一把锁，一种是synchronized(任意Object对象)，
+
+类锁(synchronized 修饰静态的方法或代码块)。互斥锁，于一个class不论被实例化多少次，其中的静态方法和静态变量在内存中都只有一份。所以，一旦一个静态的方法被申明为synchronized。此类所有的实例化对象在调用此方法，共用同一把锁，称之为类锁
+
+
+volatile是否是线程安全的？
+不是的，volatile并不能保证非源自性操作的多线程安全问题得到解决,volatile解决的是多线程间共享变量的可见性问题,
+每次修改volatile变量都会同步到主存中
+每次读取volatile变量的值都强制从主存读取最新的值(强制JVM不可优化volatile变量,如JVM优化后变量读取会使用cpu缓存而不从主存中读取)
+
+
+线程同步问题的解决：
+Java提供了java.util.concurrent.atomic 包来提供线程安全的基本类型包装类
+
+
+死锁？
+2个条件：2或多线程，同一个资源。
+a依赖b,b依赖a,会栈溢出error,不是死锁
+
+
+
+
+
+
+
+
+结论
+volatile解决了线程间共享变量的可见性问题
+使用volatile会增加性能开销
+volatile并不能解决线程同步问题
+解决i++或者++i这样的线程同步问题需要使用synchronized或者AtomicXX系列的包装类,同时也会增加性能开销
