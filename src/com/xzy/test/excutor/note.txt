@@ -265,6 +265,21 @@ CAS与synchronized的使用情景
 
 
 
+Atomic*
+
+
+
+
+ConcurrentHashMap
+用hashMap，遍历迭代的时候加值会报错
+线程安全的map有Hashtable和SynchronizedMap以及concurrentHashMap
+ConcurrentHashMap使用的锁分段技术通过细化锁的粒度来降低锁的竞争
+
+锁粒度：比如Map<List<Product>> 对于hashtable是map,对于concurrentHashMap是Product
+Segment  0-15 默认16个
+
+不足
+
 结论
 volatile解决了线程间共享变量的可见性问题
 使用volatile会增加性能开销
