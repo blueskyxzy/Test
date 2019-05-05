@@ -1,4 +1,4 @@
-package com.xzy.test.programmingofinterview;
+package com.xzy.test.programmingofinterview.wangyi;
 
 import java.util.HashMap;
 import java.util.Map;
