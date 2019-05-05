@@ -1,4 +1,4 @@
-package com.xzy.test.programmingofinterview;
+package com.xzy.test.programmingofinterview.wangyi;
 
 import java.util.ArrayList;
 import java.util.List;
