@@ -1,6 +1,5 @@
-package com.xzy.test.programmingofinterview.wangyi;
+package com.xzy.test.programmingofinterview.nowcoder.wangyi;
 
-import java.util.Calendar;
 import java.util.Scanner;
 
 // 网易编程题

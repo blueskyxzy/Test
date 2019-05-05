@@ -1,4 +1,4 @@
-package com.xzy.test.programmingofinterview.wangyi;
+package com.xzy.test.programmingofinterview.nowcoder.wangyi;
 
 
 import java.math.BigInteger;

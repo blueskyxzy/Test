@@ -1,4 +1,4 @@
-package com.xzy.test.programmingofinterview.wangyi;
+package com.xzy.test.programmingofinterview.nowcoder.wangyi;
 
 /**
  * Created by xzy on 19/1/2  .

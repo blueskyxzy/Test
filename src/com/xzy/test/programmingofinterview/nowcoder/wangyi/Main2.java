@@ -1,7 +1,6 @@
-package com.xzy.test.programmingofinterview.wangyi;
+package com.xzy.test.programmingofinterview.nowcoder.wangyi;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 /**
