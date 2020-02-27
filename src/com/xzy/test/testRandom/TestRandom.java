@@ -24,23 +24,23 @@ public class TestRandom {
 //            System.out.println(i);
 //        }
 //        System.out.println("---------");
-        String[] arr = {"000000", "000001", "000002", "000003",  "000004", "000005"};
+//        String[] arr = {"000000", "000001", "000002", "000003",  "000004", "000005"};
 //        String[] array2 = distinctRandomArray1(6, arr);
 //        for (String i:array2){
 //            System.out.println(i);
 //        }
 
-        System.out.println("---------");
-        String[] array3 = distinctRandomArray2(5, arr);
-        for (String i:array3){
-            System.out.println(i);
-        }
+//        System.out.println("---------");
+//        String[] array3 = distinctRandomArray2(5, arr);
+//        for (String i:array3){
+//            System.out.println(i);
+//        }
 //        System.out.println("---------");
 //        String[] array4 = distinctRandomArray(6, 6, arr);
 //        for (String i:array4){
 //            System.out.println(i);
 //        }
-        System.out.println("---------");
+//        System.out.println("---------");
         List<String> list = new ArrayList<>();
         list.add("000000");
         list.add("000001");
@@ -48,14 +48,55 @@ public class TestRandom {
         list.add("000003");
         list.add("000004");
         list.add("000005");
+        // 1006    10000       0.8s
+        //1006    20000       2s
+        //1006    50000       10s
+        //1006    100000      34s
+        //1006    200000      144s
+        // 2,3万以上性能明显下降，耗时明显
+        list = MyRandomUtils.distinctRandomList(10010, 6, list);
 //        List<String> randomList = distinctRandomList(6, 6, list);
 //        for(String i: randomList){
 //            System.out.println(i);
 //        }
-        List<String> randomList2 = distinctRandomList2(5, list);
-        for(String i: randomList2){
-            System.out.println(i);
+        int numberTotal = 10010;
+        if (numberTotal > 1000){
+            // 大于1000的分组分批执行，每批500
+            List<List<String>> insertGroupList= new ArrayList<>(); // 分组
+            int i = 0;
+            List<String> insertList = new ArrayList<>();
+            for (int j = 0; j < numberTotal; j++){
+                insertList.add(list.get(j));
+                i++;
+                if (i >= 500){
+                    insertGroupList.add(insertList);
+                    i = 0;
+                    insertList = new ArrayList<>();
+                }
+                if (j == numberTotal - 1){
+                    insertGroupList.add(insertList);
+                }
+            }
+            System.out.printf("------------------");
         }
+        System.out.printf("-----------------");
+        long startTime = System.currentTimeMillis();  //开始测试时间
+        List<String> randomList2 =MyRandomUtils.distinctRandomList(1000, 6, list);
+        long endTime = System.currentTimeMillis();  //开始测试时间
+        System.out.printf("耗时：" + (endTime - startTime) + "ms");
+        System.out.printf("-----------------");
+        // 生成10万可以重复的6位随机数耗时0.3s，100万耗时2s
+//        long startTime1 = System.currentTimeMillis();  //开始测试时间
+//        List<String> myList = new ArrayList<>();
+//        for (int i=0; i < 1000000; i++){
+//            String s = MyRandomUtils.MyRandom(6);
+//            myList.add(s);
+//        }
+//        long endTime1 = System.currentTimeMillis();  //开始测试时间
+//        System.out.printf("耗时：" + (endTime1 - startTime1) + "ms");
+//        for(String i: randomList2){
+//            System.out.println(i);
+//        }
     }
 
     private static int[] testB(int sz, int size){
@@ -309,6 +350,7 @@ public class TestRandom {
      * 此方法生成total个不重复的size位随机数字符串列表，首位可以是0，且生成的字符串不在已有的字符串列表list中，生成字符串总数不能大于等于2的size次方，数量越大性能越低
      */
     public static List<String> distinctRandomList2(int total, List list){
+        long startTime=System.currentTimeMillis();  //开始测试时间
         List<String> randomList = new ArrayList<>();
         String temp;
         int length = list.size();
@@ -336,6 +378,7 @@ public class TestRandom {
             }
 
         }
+        long endTime=System.currentTimeMillis();  //开始测试时间
         return randomList;
     }
 

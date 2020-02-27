@@ -1,5 +1,6 @@
 package com.xzy.test.testRandom;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -99,10 +100,10 @@ public class MyRandomUtils {
      */
     public static String MyRandom(int size){
         String sources = "0123456789";
-        Random rand = new Random();
+        Random rand = new SecureRandom();
         StringBuffer flag = new StringBuffer();
         for (int j=0; j<size; j++){
-            flag.append(sources.charAt(rand.nextInt(9)) + "");
+            flag.append(sources.charAt(rand.nextInt(10)) + "");
         }
         return flag.toString();
     }
