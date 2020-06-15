@@ -1,6 +1,8 @@
 package com.xzy.test.interview;
 
 
+import java.math.BigDecimal;
+
 public class TestMain {
 
     public static void main(String[] args) {
@@ -18,6 +20,10 @@ public class TestMain {
         System.out.println("result:" + result3);
         System.out.println("result:" + result4);
         System.out.println("result:" + result5);
+        String se = "\"code\" : \"123\"";
+        Integer cashMoney = 114990000;
+        String result = String.valueOf(new BigDecimal(cashMoney).divide(new BigDecimal(1000000)).setScale(2, BigDecimal.ROUND_HALF_UP));
+        System.out.printf("result:" + result);
     }
 
 }

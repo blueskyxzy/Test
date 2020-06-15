@@ -3,6 +3,7 @@ package com.xzy.test.testMap;
 import com.xzy.test.testHashMap.MyHashMap;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class testMap {
 
@@ -20,6 +21,10 @@ public class testMap {
 
         String a = "";
         System.out.println("a.length="+a.length());
+
+        Map<Long,String> m = new ConcurrentHashMap<>();
+        m.put(1L, "esfs");
+        System.out.printf("11");
     }
 
 }
