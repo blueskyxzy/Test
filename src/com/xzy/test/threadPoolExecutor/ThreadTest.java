@@ -58,6 +58,7 @@ public class ThreadTest {
             }
         } finally {
             threadPool.shutdown();
+            semp.release();
         }
         // 访问完后，释放
         // 这里不能保证任务执行完就释放信号，释放信号了但线程任务还在跑
@@ -74,7 +75,47 @@ public class ThreadTest {
 //                Thread.sleep(100);
 //            }
 //        }
-        semp.release();
+//        semp.release();
+    }
+
+    /**
+     * @Description: 信号量测试
+     * @Author: xzy
+     * @Date: 2020/09/29
+     */
+    public static void SemaphoreTest2() throws InterruptedException {
+        // 获取许可
+        semp.acquire();
+        System.out.println("thead name:" + Thread.currentThread().getName());
+        List<Integer> orderBillIds = new ArrayList<>();
+        for (int i = 0;i< 10; i++){
+            orderBillIds.add(i);
+        }
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(2, 3, 0L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), new ThreadPoolExecutor.CallerRunsPolicy());
+        List<Future<Integer>> futures = new ArrayList<>();
+        for (Integer orderBillId: orderBillIds){
+            Future<Integer> futureTask = threadPoolExecutor.submit(() -> {
+//                Thread.sleep(1000);
+                System.out.println(Thread.currentThread().getName() + " is running" + orderBillId);
+                return orderBillId;
+            });
+            futures.add(futureTask);
+        }
+        try {
+            // 获取返回结果给List
+            for (Future<Integer> future :futures) {
+                Integer result = future.get();
+                System.out.println("result: " + result);
+            }
+        } catch (InterruptedException | ExecutionException e){
+            Thread.currentThread().interrupt();
+            //e.printStackTrace();
+            System.out.println("asyn error " + e);
+        } finally {
+            threadPoolExecutor.shutdown();
+            semp.release();
+        }
+        System.out.println("thead end:" + Thread.currentThread().getName());
     }
 
     public static void AtomicTest() throws InterruptedException {

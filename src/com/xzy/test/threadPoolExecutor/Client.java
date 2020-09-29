@@ -12,7 +12,7 @@ import java.util.concurrent.*;
 public class Client {
 
     public static void main(String[] args) throws InterruptedException {
-        asynTask4();
+        asynTask33();
     }
 
     public static void asynTask1() {
@@ -86,6 +86,19 @@ public class Client {
             new Thread(() ->{
                 try {
                     ThreadTest.SemaphoreTest();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+
+        }
+    }
+
+    public static void asynTask33() throws InterruptedException {
+        for (int i = 0;i< 10; i++) {
+            new Thread(() ->{
+                try {
+                    ThreadTest.SemaphoreTest2();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
