@@ -114,7 +114,7 @@ public class ThreadTest {
     }
 
     /**
-    * @Description: 测试发现ThreadLocal不能控制信号量，并发数。
+    * @Description: 测试发现ThreadLocal不能控制信号量，并发数。是各自线程的副本
     * @Author: xzy
     * @Date: 2020/09/29
     */
