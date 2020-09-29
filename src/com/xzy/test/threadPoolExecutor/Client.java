@@ -12,7 +12,7 @@ import java.util.concurrent.*;
 public class Client {
 
     public static void main(String[] args) throws InterruptedException {
-        asynTask3();
+        asynTask4();
     }
 
     public static void asynTask1() {
@@ -104,6 +104,38 @@ public class Client {
                 }
             }).start();
 
+        }
+    }
+
+    public static void asynTask5() throws InterruptedException {
+        for (int i = 0;i< 10; i++) {
+            new Thread(() ->{
+                try {
+                    ThreadTest.AtomicTest();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
+        Thread.sleep(1000);
+        for (int i = 0;i< 5; i++) {
+            new Thread(() ->{
+                try {
+                    ThreadTest.AtomicTest();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
+        Thread.sleep(1000);
+        for (int i = 0;i< 5; i++) {
+            new Thread(() ->{
+                try {
+                    ThreadTest.AtomicTest();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
         }
     }
 }

@@ -17,9 +17,7 @@ public class ThreadTest {
 
     private static ThreadLocal<Integer> local = ThreadLocal.withInitial(() -> 2);
 
-    private static AtomicInteger atomicInteger = new AtomicInteger(2);
-
-
+    private static AtomicInteger atomicInteger = new AtomicInteger(3);
 
 //    private static ThreadLocal<Integer> local = new ThreadLocal<Integer>() {
 //        @Override public Integer initialValue() {
@@ -68,22 +66,66 @@ public class ThreadTest {
         //  CyclicBrrier: N个线程相互等待，任何一个线程完成之前，所有的线程都必须等待。
 
 //        countDownLatch.await();
-        while(true) {
-            if(threadPool.isTerminated()) {
-                break;
-            }else {
-                Thread.sleep(100);
-            }
-        }
+
+//        while(true) {
+//            if(threadPool.isTerminated()) {
+//                break;
+//            }else {
+//                Thread.sleep(100);
+//            }
+//        }
         semp.release();
     }
 
+    public static void AtomicTest() throws InterruptedException {
+        System.out.println("thead name:" + Thread.currentThread().getName());
+        int ai = atomicInteger.get();
+        if (ai <=0){
+            System.out.println(Thread.currentThread().getName() + "不处理");
+            return;
+        } else {
+            atomicInteger.getAndDecrement();
+        }
+        List<Integer> lists = new ArrayList<>();
+        for (int i = 0;i< 2; i++){
+            lists.add(i);
+        }
+        ThreadPoolExecutor threadPool = new ThreadPoolExecutor(
+                2, 3, 10, TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>(),
+                new ThreadPoolExecutor.CallerRunsPolicy());
+        try {
+            if (lists != null) {
+                lists.forEach(data -> threadPool.execute(() -> System.out.println(Thread.currentThread().getName() + " is running" + data)));
+            }
+        } finally {
+            threadPool.shutdown();
+        }
+
+//        while(true) {
+//            if(threadPool.isTerminated()) {
+//                break;
+//            }else {
+//                Thread.sleep(100);
+//            }
+//        }
+        System.out.println("thead end:" + Thread.currentThread().getName());
+        atomicInteger.getAndIncrement();
+    }
+
+    /**
+    * @Description: 测试发现ThreadLocal不能控制信号量，并发数。
+    * @Author: xzy
+    * @Date: 2020/09/29
+    */
     public static void ThreadLocalTest() throws InterruptedException {
+        System.out.println("thead name:" + Thread.currentThread().getName());
         Integer a= local.get();
         if (a <=0){
-            System.out.println("不处理");
+            System.out.println(Thread.currentThread().getName() + "不处理");
         } else {
-            local.set(--a);
+            System.out.println(Thread.currentThread().getName() + "ThreadLocal :" + a);
+            local.set(a-1);
         }
         List<Integer> lists = new ArrayList<>();
         for (int i = 0;i< 20; i++){
@@ -111,6 +153,7 @@ public class ThreadTest {
         }
         // 执行完
         local.set(local.get() + 1);
+        System.out.println("thead end:" + Thread.currentThread().getName());
     }
 
 }
