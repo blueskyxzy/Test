@@ -6,16 +6,47 @@ import java.math.BigDecimal;
 public class TestMain {
 
     public static void main(String[] args) {
-        String str = "xiyou" + "3g" + "backend";
-        String str2 = "xiyou3gbackend";
-        String str3 = str + "test";
-        String str4 = "a" + "b";
-        System.out.println(str2 == str);
-        System.out.println(str3 == "xiyou3gbackendtest");
-        System.out.println(str4 == "ab");
-
-        String s = "aBc12D93111ffg";
-        synchrStr(s);
+        String s = "海南省直辖区县陵水黎族自治县新村镇绿城蓝湾小镇蝶兰轩北2-1-302";
+        String receiveAddr = s.replace(" ","");
+        String province = receiveAddr;
+        String city = receiveAddr;
+        String are = receiveAddr;
+        if (!receiveAddr.isEmpty()) {
+            if (receiveAddr.contains("省")){
+                province = receiveAddr.substring(0, receiveAddr.indexOf("省")+1);
+                if (receiveAddr.contains("市")){
+                    city = receiveAddr.substring(receiveAddr.indexOf("省")+1, receiveAddr.indexOf("市")+1);
+                    if (receiveAddr.contains("区")){
+                        are = receiveAddr.substring(receiveAddr.indexOf("市")+1, receiveAddr.indexOf("区")+1);
+                    }
+                } else if (receiveAddr.contains("县")){
+                    city = receiveAddr.substring(receiveAddr.indexOf("省")+1, receiveAddr.indexOf("县")+1);
+                    if (receiveAddr.contains("区")){
+                        are = receiveAddr.substring(receiveAddr.indexOf("省")+1, receiveAddr.indexOf("区")+1);
+                    } else {
+                        are = city;
+                    }
+                }
+            } else if (receiveAddr.contains("市")){
+                province = receiveAddr.substring(0, receiveAddr.indexOf("市")+1);
+                city = province;
+                if (receiveAddr.contains("区")){
+                    are = receiveAddr.substring(receiveAddr.indexOf("市")+1, receiveAddr.indexOf("区")+1);
+                } else if (receiveAddr.contains("县")){
+                    are = receiveAddr.substring(receiveAddr.indexOf("市")+1, receiveAddr.indexOf("县")+1);
+                }
+            }
+        }
+        System.out.println("-----------");
+//        String str = "xiyou" + "3g" + "backend";
+//        String str2 = "xiyou3gbackend";
+//        String str3 = str + "test";
+//        String str4 = "a" + "b";
+//        System.out.println(str2 == str);
+//        System.out.println(str3 == "xiyou3gbackendtest");
+//        System.out.println(str4 == "ab");
+//        String s = "aBc12D93111ffg";
+//        synchrStr(s);
     }
 
 //
