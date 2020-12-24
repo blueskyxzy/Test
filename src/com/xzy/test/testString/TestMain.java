@@ -6,18 +6,29 @@ import java.math.BigDecimal;
 public class TestMain {
 
     public static void main(String[] args) {
-        String s = "海南省直辖区县陵水黎族自治县新村镇绿城蓝湾小镇蝶兰轩北2-1-302";
+        String itemId = "QYs24144-142444";
+        Long commodityBillId;
+        if (itemId.contains("#")){
+            commodityBillId = Long.valueOf(itemId.substring(itemId.indexOf("-") + 1, itemId.indexOf("#")));
+        } else {
+            commodityBillId = Long.valueOf(itemId.substring(itemId.indexOf("-") + 1));
+        }
+        System.out.println("------");
+
+        String s = "内蒙古自治区锡林郭勒盟东乌珠穆沁旗宝格达乌拉总场测试空间";
         String receiveAddr = s.replace(" ","");
-        String province = receiveAddr;
-        String city = receiveAddr;
-        String are = receiveAddr;
-        if (!receiveAddr.isEmpty()) {
+        String province = "";
+        String city = "";
+        String are = "";
+        if (receiveAddr.length() > 0) {
             if (receiveAddr.contains("省")){
                 province = receiveAddr.substring(0, receiveAddr.indexOf("省")+1);
                 if (receiveAddr.contains("市")){
                     city = receiveAddr.substring(receiveAddr.indexOf("省")+1, receiveAddr.indexOf("市")+1);
                     if (receiveAddr.contains("区")){
                         are = receiveAddr.substring(receiveAddr.indexOf("市")+1, receiveAddr.indexOf("区")+1);
+                    } else if (receiveAddr.contains("县")){
+                        are = receiveAddr.substring(receiveAddr.indexOf("市")+1, receiveAddr.indexOf("县")+1);
                     }
                 } else if (receiveAddr.contains("县")){
                     city = receiveAddr.substring(receiveAddr.indexOf("省")+1, receiveAddr.indexOf("县")+1);
@@ -37,6 +48,36 @@ public class TestMain {
                 }
             }
         }
+//        String receiveAddr = s.replace(" ","");
+//        String province = receiveAddr;
+//        String city = receiveAddr;
+//        String are = receiveAddr;
+//        if (!receiveAddr.isEmpty()) {
+//            if (receiveAddr.contains("省")){
+//                province = receiveAddr.substring(0, receiveAddr.indexOf("省")+1);
+//                if (receiveAddr.contains("市")){
+//                    city = receiveAddr.substring(receiveAddr.indexOf("省")+1, receiveAddr.indexOf("市")+1);
+//                    if (receiveAddr.contains("区")){
+//                        are = receiveAddr.substring(receiveAddr.indexOf("市")+1, receiveAddr.indexOf("区")+1);
+//                    }
+//                } else if (receiveAddr.contains("县")){
+//                    city = receiveAddr.substring(receiveAddr.indexOf("省")+1, receiveAddr.indexOf("县")+1);
+//                    if (receiveAddr.contains("区")){
+//                        are = receiveAddr.substring(receiveAddr.indexOf("省")+1, receiveAddr.indexOf("区")+1);
+//                    } else {
+//                        are = city;
+//                    }
+//                }
+//            } else if (receiveAddr.contains("市")){
+//                province = receiveAddr.substring(0, receiveAddr.indexOf("市")+1);
+//                city = province;
+//                if (receiveAddr.contains("区")){
+//                    are = receiveAddr.substring(receiveAddr.indexOf("市")+1, receiveAddr.indexOf("区")+1);
+//                } else if (receiveAddr.contains("县")){
+//                    are = receiveAddr.substring(receiveAddr.indexOf("市")+1, receiveAddr.indexOf("县")+1);
+//                }
+//            }
+//        }
         System.out.println("-----------");
 //        String str = "xiyou" + "3g" + "backend";
 //        String str2 = "xiyou3gbackend";
