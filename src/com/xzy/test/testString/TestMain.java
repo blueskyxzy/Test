@@ -6,6 +6,10 @@ import java.math.BigDecimal;
 public class TestMain {
 
     public static void main(String[] args) {
+        Short typeJw = (short)0;
+        if (typeJw == null || typeJw == 0){
+            System.out.println("-----");
+        }
         String itemId = "QYs24144-142444";
         Long commodityBillId;
         if (itemId.contains("#")){
