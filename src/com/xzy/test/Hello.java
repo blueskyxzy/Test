@@ -37,6 +37,8 @@ public class Hello {
 //                System.out.println("-----");
 //            }
 //        }
+        String itemId = "1fhsklf-111";
+        String billId = itemId.substring(0, itemId.indexOf("-"));
         System.out.println("------");
 //        Hello hello = new Hello();
 //        for (int  i = 0; i < 50_000; i++) {
